@@ -29,6 +29,7 @@ $ git clone https://github.com/fivegoodfriends/ConfigCop.git
 $ cd ConfigCop
 $ swift build
 ```
+After building with SPM you can manually copy the executable file to any location you like, such as `/usr/local/bin` or run `$ make` to do this for you.
 
 ## Creating a Template File
 

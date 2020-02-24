@@ -12,7 +12,7 @@ import Foundation
 
 public class VerificationController {
 
-    public static func verify(config xcconfigFile: String, against templateFile: String) {
+    public static func verify(config xcconfigFile: String, against templateFile: String, verbose: Bool = false) {
         ConsoleIO.writeMessage("Attempting to verify: \(xcconfigFile), against template: \(templateFile)")
         guard let config = getConfig(from: xcconfigFile)
         else {
@@ -25,7 +25,7 @@ public class VerificationController {
             exit(1)
         }
 
-        verify(config: config, template: template)
+        verify(config: config, template: template, verbose: verbose)
     }
 
 }
@@ -44,9 +44,11 @@ private extension VerificationController {
         return TemplateController.templateFromFile(templateFile)
     }
 
-    static func verify(config: XCConfig, template: Template) {
-        ConsoleIO.writeMessage("Verifying attributes: \(config.description)")
-        ConsoleIO.writeMessage("Verifying against template: \(template.description)")
+    static func verify(config: XCConfig, template: Template, verbose: Bool = false) {
+        if verbose {
+            ConsoleIO.writeMessage("Verifying attributes: \(config.description)")
+            ConsoleIO.writeMessage("Verifying against template: \(template.description)")
+        }
 
         var foundItems: [String] = []
         var errorItems: [String] = []
@@ -58,7 +60,7 @@ private extension VerificationController {
             }
             else {
                 errorItems.append(templateItem)
-                ConsoleIO.writeMessage("Error: \(templateItem) (required item) not found in config", to: .error)
+                ConsoleIO.writeMessage("ERROR: \(templateItem) (required item) not found in config", to: .error)
             }
         }
 
@@ -68,7 +70,7 @@ private extension VerificationController {
             }
             else {
                 warningItems.append(templateItem)
-                ConsoleIO.writeMessage("Warning: \(templateItem) (optional item) not found in config")
+                ConsoleIO.writeMessage("WARNING: \(templateItem) (optional item) not found in config")
             }
         }
 
